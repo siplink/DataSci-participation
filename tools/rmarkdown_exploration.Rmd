@@ -1,11 +1,13 @@
 ---
 title: "Rmarkdown practice"
+author: "Kenyatta Siplin"
+date: "Last updated `r format(Sys.time(), "%d %B, %Y")`"
 output:
+  pdf_document:
+    toc: yes
   html_document:
     theme: cerulean
-    toc: TRUE
-author: 'Kenyatta Siplin'
-date: Last updated `r format(Sys.time(), "%d %B, %Y")`
+    toc: yes
 ---
 
 ``` {r}
