@@ -1,0 +1,68 @@
+---
+title: "Rmarkdown practice"
+output:
+  html_document:
+    theme: cerulean
+    toc: TRUE
+author: 'Kenyatta Siplin'
+date: Last updated `r format(Sys.time(), "%d %B, %Y")`
+---
+
+``` {r}
+# install.packages('gapminder')
+# install.packages('DT')
+# install.packages('tibble')
+```
+
+
+``` {r}
+library(gapminder)
+library(DT)
+library(tibble)
+```
+```{r}
+gapminder
+```
+
+mtcars is a dataset describing the features of automobiles from an old magazine. It has 7 variables.
+```{r}
+mtcars
+mtcars['mpg']
+mtcars[['mpg']]
+mtcars$mpg
+```
+
+The mean difference was `r difference`
+```{r}
+mean(mtcars[['mpg']])
+mean(mtcars$mpg)
+```
+```{r}
+mtcars
+mtcars$cyl
+unique(mtcars$cyl)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+**This is an R Markdown document.** Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

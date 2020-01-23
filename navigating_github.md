@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 
 # My Participation Repository (siplink user account):
 https://github.com/siplink/DataSci-participation/edit/master/navigating_github.md
@@ -22,3 +27,12 @@ Group 1 | Group 2
 ------- | -------
 Content 1a | Content 2a
 Content 1b | Content 2b
+
+install.packages('rmarkdown')
+
+install.packages('gapminder')
+
+install.packages('DT')
+
+install.packages('tibble')
+
