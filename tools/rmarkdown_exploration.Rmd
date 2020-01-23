@@ -32,7 +32,7 @@ mtcars[['mpg']]
 mtcars$mpg
 ```
 
-The mean difference was `r difference`
+The mean difference was `r mean(mtcars$mpg)`
 ```{r}
 mean(mtcars[['mpg']])
 mean(mtcars$mpg)
