@@ -11,4 +11,9 @@ https://github.com/USF-Psych-DataSci-2020/DataSci-hw-siplink
 # My Account (siplink user):
 https://github.com/siplink
 
-example text edit
+**example text edit**
+
+*italic text edit*
+
+* Item 1
+  * Item 1a
