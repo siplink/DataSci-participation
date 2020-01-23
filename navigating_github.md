@@ -16,4 +16,4 @@ https://github.com/siplink
 *italic text edit*
 
 * [] Item 1
-  * [] Item 1a
+  * [x] Item 1a :+1:
