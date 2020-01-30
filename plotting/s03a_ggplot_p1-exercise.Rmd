@@ -50,12 +50,12 @@ Fill in the seven grammar components for this plot.
 | Grammar Component     | Specification |
 |-----------------------|---------------|
 | __data__              | `gapminder` |
-| __aesthetic mapping__ | FILL_THIS_IN |
-| __geometric object__  | FILL_THIS_IN |
-| scale                 | FILL_THIS_IN |
-| statistical transform | FILL_THIS_IN |
-| coordinate system     | FILL_THIS_IN |
-| facetting             | FILL_THIS_IN |
+| __aesthetic mapping__ | **x** = continent , **y** = count  |
+| __geometric object__  | bars |
+| scale                 | linear |
+| statistical transform | frequency |
+| coordinate system     | rectangular |
+| facetting             | none |
 
 ## Exercise 2: `ggplot2` Syntax (Your Turn)
 
@@ -84,10 +84,10 @@ Produce a line chart showing the concentration over time. Specifically, the plot
 
 Fill in the blanks to obtain the plot:
 
-```{r, fig.width = 5, fig.height = 2}
-ggplot(FILL_THIS_IN, aes(FILL_THIS_IN, FILL_THIS_IN)) +
-  FILL_THIS_IN()
-```
+```{r, fig.width = 5, fig.height = 2} 
+p <- ggplot(mauna, aes(month, conc)) +
+  geom_line()
+``` 
 
 ### 2(b)
 
@@ -100,7 +100,8 @@ The following code mistakenly puts the month variable on the y-axis. Fill in the
 
 ```{r, fig.width = 5, fig.height = 2}
 ggplot(mauna, aes(y = month)) +
-  geom_line(aes(FILL_THIS_IN))
+  geom_line(aes(x = month, y = conc)) +
+  ylab("conc")
 ```
 
 ### 2(c)
@@ -109,7 +110,7 @@ You can store the output of the plot in a variable, too. Store the plot from 2(a
 
 ```{r, fig.width = 5, fig.height = 2}
 p +
-  FILL_THIS_IN(colour = FILL_THIS_IN)
+  geom_line(colour = "green")
 ```
 
 ### 2(d)
@@ -117,8 +118,10 @@ p +
 What's wrong with the following code? Fix it.
 
 ```{r, fig.width = 5, fig.height = 2}
-ggplot(gapminder) +
-  geom_point(x = gdpPercap, y = lifeExp, alpha = 0.1)
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(alpha = 0.1) +
+  scale_x_log10(labels = scales::comma_format())
+  
 ```
 
 
@@ -132,6 +135,17 @@ So you're a ggplot2 pro? Then, let's see this plot adapted to polar coordinates.
 The plot should look like a spiral, or concentric circles. 
 
 ```{r, fig.width = 5, fig.height = 2}
-FILL_THIS_IN
+ggplot(mauna, aes(month, conc)) +
+  geom_line() +
+  coord_polar()
 ```
 
+
+```{r, fig.width = 5, fig.height = 2}
+ggplot(gapminder, aes(gdpPercap, lifeExp, color = continent)) + 
+  geom_point(alpha = 0.1) +
+  scale_x_log10("GDP per capita", labels = scales::dollar_format()) +
+  theme_bw() +
+  ylab("Life Expectancy")
+
+```
