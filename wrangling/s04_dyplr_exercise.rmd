@@ -1,5 +1,5 @@
----
-  title: 's04: `dplyr` Exercise'
+
+  title: s04: `dplyr` Exercise
 output: 
   html_document:
   keep_md: true
@@ -32,8 +32,8 @@ Hint: You can add the `suppressPackageStartupMessages()` function around the
   
   ```{r load packages, warning = FALSE, message = FALSE}
 # load your packages here:
-library(FILL_THIS_IN)
-library(FILL_THIS_IN)
+library(tidyverse)
+library(gapminder)
 ```
 
 
@@ -43,7 +43,7 @@ library(FILL_THIS_IN)
 the `gapminder` data, in that order.
 
 ```{r}
-select(gapminder, FILL_THIS_IN)
+select(gapminder, year, lifeExp, country)
 ```
 
 2. Select all variables, from `country` to `lifeExp`.
@@ -53,49 +53,48 @@ select(gapminder, FILL_THIS_IN)
 select(gapminder, country, continent, year, lifeExp)
 
 # Better way:
-select(gapminder, FILL_THIS_IN)
+select(gapminder, country:lifeExp)
 ```
 
 3. Select all variables, except `lifeExp`.
 
 ```{r}
-select(gapminder, FILL_THIS_IN)
+select(gapminder, !lifeExp)
 ```
 
 4. Put `continent` first. Hint: use the `everything()` function.
 
 ```{r}
-select(gapminder, FILL_THIS_IN, FILL_THIS_IN)
+select(gapminder, continent, everything())
 ```
 
 5. Rename `continent` to `cont`.
 
 ```{r}
 # compare
-select(gapminder, FILL_THIS_IN)
+select(gapminder, continent)
 
-rename(gapminder, FILL_THIS_IN)
+rename(gapminder, continent='cont')
 ```
-
 
 ## `arrange()`
 
 1. Order by year.
 
 ```{r}
-arrange(gapminder, FILL_THIS_IN)
+arrange(gapminder, year)
 ```
 
 2. Order by year, in descending order.
 
 ```{r}
-arrange(gapminder, FILL_THIS_IN)
+arrange(gapminder, desc(year))
 ```
 
 3. Order by year, then by life expectancy.
 
 ```{r}
-arrange(gapminder, FILL_THIS_IN, FILL_THIS_IN)
+arrange(gapminder, year, lifeExp)
 ```
 
 
@@ -127,7 +126,9 @@ Now using with pipes:
   
   ```{r}
 # alter the below to include 2 "pipes"
-arrange(select(gapminder, year, lifeExp, country), year, lifeExp)
+gapminder %>%
+  select(year, lifeExp, country) %>%
+  arrange(year, lifeExp)
 ```
 
 
