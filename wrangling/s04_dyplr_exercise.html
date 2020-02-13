@@ -618,20 +618,48 @@ arrange(year, lifeExp)</code></pre>
 <li>Only take data with population greater than 100 million.</li>
 </ol>
 <pre class="r"><code>gapminder %&gt;%
-  filter(FILL_THIS_IN)</code></pre>
-<pre><code>## Error: object &#39;FILL_THIS_IN&#39; not found</code></pre>
+  filter(pop &gt; 100000000)</code></pre>
+<pre><code>## # A tibble: 77 x 6
+##    country    continent  year lifeExp       pop gdpPercap
+##    &lt;fct&gt;      &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+##  1 Bangladesh Asia       1987    52.8 103764241      752.
+##  2 Bangladesh Asia       1992    56.0 113704579      838.
+##  3 Bangladesh Asia       1997    59.4 123315288      973.
+##  4 Bangladesh Asia       2002    62.0 135656790     1136.
+##  5 Bangladesh Asia       2007    64.1 150448339     1391.
+##  6 Brazil     Americas   1972    59.5 100840058     4986.
+##  7 Brazil     Americas   1977    61.5 114313951     6660.
+##  8 Brazil     Americas   1982    63.3 128962939     7031.
+##  9 Brazil     Americas   1987    65.2 142938076     7807.
+## 10 Brazil     Americas   1992    67.1 155975974     6950.
+## # ... with 67 more rows</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Your turn: of those rows filtered from step 1., only take data from Asia.</li>
 </ol>
 <pre class="r"><code>gapminder %&gt;%
-  filter(FILL_THIS_IN)</code></pre>
-<pre><code>## Error: object &#39;FILL_THIS_IN&#39; not found</code></pre>
+  filter(pop &gt; 100000000, continent == &#39;Asia&#39;)</code></pre>
+<pre><code>## # A tibble: 52 x 6
+##    country    continent  year lifeExp       pop gdpPercap
+##    &lt;fct&gt;      &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+##  1 Bangladesh Asia       1987    52.8 103764241      752.
+##  2 Bangladesh Asia       1992    56.0 113704579      838.
+##  3 Bangladesh Asia       1997    59.4 123315288      973.
+##  4 Bangladesh Asia       2002    62.0 135656790     1136.
+##  5 Bangladesh Asia       2007    64.1 150448339     1391.
+##  6 China      Asia       1952    44   556263527      400.
+##  7 China      Asia       1957    50.5 637408000      576.
+##  8 China      Asia       1962    44.5 665770000      488.
+##  9 China      Asia       1967    58.4 754550000      613.
+## 10 China      Asia       1972    63.1 862030000      677.
+## # ... with 42 more rows</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Repeat 2, but take data from countries Brazil, and China.</li>
 </ol>
 <pre class="r"><code>gapminder %&gt;%
-  filter(FILL_THIS_IN)</code></pre>
-<pre><code>## Error: object &#39;FILL_THIS_IN&#39; not found</code></pre>
+  filter(pop &gt; 100000000, country == &#39;Brazil&#39; &amp;&amp; &#39;China&#39;)</code></pre>
+<pre><code>## # A tibble: 0 x 6
+## # ... with 6 variables: country &lt;fct&gt;, continent &lt;fct&gt;, year &lt;int&gt;,
+## #   lifeExp &lt;dbl&gt;, pop &lt;int&gt;, gdpPercap &lt;dbl&gt;</code></pre>
 </div>
 <div id="mutate-10-min" class="section level2">
 <h2><code>mutate()</code> (10 min)</h2>
@@ -644,18 +672,44 @@ arrange(year, lifeExp)</code></pre>
 <li>GDP in billions, named (<code>gdpBill</code>), rounded to two decimals.</li>
 </ul>
 <pre class="r"><code>gapminder %&gt;%
-  mutate(FILL_THIS_IN)</code></pre>
-<pre><code>## Error: object &#39;FILL_THIS_IN&#39; not found</code></pre>
+  mutate(GDP = gdpPercap * pop)</code></pre>
+<pre><code>## # A tibble: 1,704 x 7
+##    country     continent  year lifeExp      pop gdpPercap          GDP
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+##  1 Afghanistan Asia       1952    28.8  8425333      779.  6567086330.
+##  2 Afghanistan Asia       1957    30.3  9240934      821.  7585448670.
+##  3 Afghanistan Asia       1962    32.0 10267083      853.  8758855797.
+##  4 Afghanistan Asia       1967    34.0 11537966      836.  9648014150.
+##  5 Afghanistan Asia       1972    36.1 13079460      740.  9678553274.
+##  6 Afghanistan Asia       1977    38.4 14880372      786. 11697659231.
+##  7 Afghanistan Asia       1982    39.9 12881816      978. 12598563401.
+##  8 Afghanistan Asia       1987    40.8 13867957      852. 11820990309.
+##  9 Afghanistan Asia       1992    41.7 16317921      649. 10595901589.
+## 10 Afghanistan Asia       1997    41.8 22227415      635. 14121995875.
+## # ... with 1,694 more rows</code></pre>
 <p>Notice the backwards compatibility! No need for loops!</p>
 <p>Try the same thing, but with <code>transmute</code> (drops all other variables).</p>
 <pre class="r"><code>gapminder %&gt;%
-  transmute(FILL_THIS_IN)</code></pre>
-<pre><code>## Error: object &#39;FILL_THIS_IN&#39; not found</code></pre>
+  transmute(GDP = gdpPercap * pop)</code></pre>
+<pre><code>## # A tibble: 1,704 x 1
+##             GDP
+##           &lt;dbl&gt;
+##  1  6567086330.
+##  2  7585448670.
+##  3  8758855797.
+##  4  9648014150.
+##  5  9678553274.
+##  6 11697659231.
+##  7 12598563401.
+##  8 11820990309.
+##  9 10595901589.
+## 10 14121995875.
+## # ... with 1,694 more rows</code></pre>
 <p>The <code>if_else</code> function is useful for changing certain elements in a data frame.</p>
 <p>Example: Suppose Canada’s 1952 life expectancy was mistakenly entered as 68.8 in the data frame, but is actually 70. Fix it using <code>if_else</code> and <code>mutate</code>.</p>
 <pre class="r"><code>gapminder %&gt;%
-  mutate(FILL_THIS_IN)</code></pre>
-<pre><code>## Error: object &#39;FILL_THIS_IN&#39; not found</code></pre>
+  mutate(country == Canada, year == 1952, if_else(70))</code></pre>
+<pre><code>## Error: object &#39;Canada&#39; not found</code></pre>
 <p>Your turn: Make a new column called <code>cc</code> that pastes the country name followed by the continent, separated by a comma. (Hint: use the <code>paste</code> function with the <code>sep=&quot;, &quot;</code> argument).</p>
 <p>These functions we’ve seen are called <strong>vectorized functions</strong>-they are designed to work with vectors and do their computation on each element of the vector(s).</p>
 </div>

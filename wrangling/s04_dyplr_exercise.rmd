@@ -159,7 +159,7 @@ gapminder %>%
 
 ```{r}
 gapminder %>%
-  filter(pop > 100000000, continent == 'Asia')
+  filter(pop > 100000000, country == 'Brazil' && 'China')
 ```
 
 ## `mutate()` (10 min)
@@ -179,7 +179,7 @@ Let's get:
 
 ```{r}
 gapminder %>%
-  mutate(FILL_THIS_IN)
+  mutate(GDP = gdpPercap * pop)
 ```
 
 Notice the backwards compatibility! No need for loops!
@@ -188,7 +188,7 @@ Try the same thing, but with `transmute` (drops all other variables).
 
 ```{r}
 gapminder %>%
-  transmute(FILL_THIS_IN)
+  transmute(GDP = gdpPercap * pop)
 ```
 
 The `if_else` function is useful for changing certain elements in a data frame.
@@ -197,7 +197,7 @@ Example: Suppose Canada's 1952 life expectancy was mistakenly entered as 68.8 in
 
 ```{r}
 gapminder %>%
-  mutate(FILL_THIS_IN)
+  mutate(country == Canada, year == 1952, if_else(70))
 ```
 
 Your turn: Make a new column called `cc` that pastes the country name followed by the continent, separated by a comma. (Hint: use the `paste` function with the `sep=", "` argument).
