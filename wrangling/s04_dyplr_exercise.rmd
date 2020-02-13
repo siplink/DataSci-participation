@@ -145,21 +145,21 @@ Return to guide at the section on *Relational/Comparison and Logical Operators i
 
 ```{r}
 gapminder %>%
-  filter(FILL_THIS_IN)
+  filter(pop > 100000000)
 ```
 
 2. Your turn: of those rows filtered from step 1., only take data from Asia.
 
 ```{r}
 gapminder %>%
-  filter(FILL_THIS_IN)
+  filter(pop > 100000000, continent == 'Asia')
 ```
 
 3. Repeat 2, but take data from countries Brazil, and China. 
 
 ```{r}
 gapminder %>%
-  filter(FILL_THIS_IN)
+  filter(pop > 100000000, continent == 'Asia')
 ```
 
 ## `mutate()` (10 min)
