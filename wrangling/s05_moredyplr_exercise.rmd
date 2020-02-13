@@ -217,6 +217,7 @@ psych::bfi %>%
 ```{r}
 m_bfi <-
   psych::bfi %>% 
+  as_tibble() %>%
   group_by(education) %>%
   rowwise() %>%
   mutate(A_mean = mean(c(A1, A2, A3, A4, A5)),
