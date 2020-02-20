@@ -54,6 +54,8 @@ lotr
 
 1. Would you say this data is in tidy format?
 
+This data is not in tidy format because observations are split up between multiple rows. 
+
    <!-- Describe why or why not in this space. -->
 
 2. Widen the data so that we see the words spoken by each race, by putting race as its own column.
@@ -61,13 +63,21 @@ lotr
 
 ```r
 (lotr_wide <- lotr %>% 
-  pivot_wider(FILL_THIS_IN = c(-Race, -Words), 
-              FILL_THIS_IN = Race, 
-              FILL_THIS_IN = Words))
+  pivot_wider(id_cols = c(-Race, -Words), 
+              names_from = Race, 
+              values_from = Words))
 ```
 
 ```
-## Error in pivot_wider(., FILL_THIS_IN = c(-Race, -Words), FILL_THIS_IN = Race, : unused arguments (FILL_THIS_IN = c(-Race, -Words), FILL_THIS_IN = Race, FILL_THIS_IN = Words)
+## # A tibble: 6 x 5
+##   Film                       Gender   Elf Hobbit   Man
+##   <chr>                      <chr>  <dbl>  <dbl> <dbl>
+## 1 The Fellowship Of The Ring Female  1229     14     0
+## 2 The Two Towers             Female   331      0   401
+## 3 The Return Of The King     Female   183      2   268
+## 4 The Fellowship Of The Ring Male     971   3644  1995
+## 5 The Two Towers             Male     513   2463  3589
+## 6 The Return Of The King     Male     510   2673  2459
 ```
 
 3. Re-lengthen the wide LOTR data from Question 2 above.
@@ -75,13 +85,33 @@ lotr
 
 ```r
 lotr_wide %>% 
-  pivot_longer(FILL_THIS_IN = FILL_THIS_IN, 
-               names_to  = FILL_THIS_IN, 
-               values_to = FILL_THIS_IN)
+  pivot_longer(cols = c(Elf, Hobbit, Man), 
+               names_to  = 'Race', 
+               values_to = 'Words')
 ```
 
 ```
-## Error in eval(lhs, parent, parent): object 'lotr_wide' not found
+## # A tibble: 18 x 4
+##    Film                       Gender Race   Words
+##    <chr>                      <chr>  <chr>  <dbl>
+##  1 The Fellowship Of The Ring Female Elf     1229
+##  2 The Fellowship Of The Ring Female Hobbit    14
+##  3 The Fellowship Of The Ring Female Man        0
+##  4 The Two Towers             Female Elf      331
+##  5 The Two Towers             Female Hobbit     0
+##  6 The Two Towers             Female Man      401
+##  7 The Return Of The King     Female Elf      183
+##  8 The Return Of The King     Female Hobbit     2
+##  9 The Return Of The King     Female Man      268
+## 10 The Fellowship Of The Ring Male   Elf      971
+## 11 The Fellowship Of The Ring Male   Hobbit  3644
+## 12 The Fellowship Of The Ring Male   Man     1995
+## 13 The Two Towers             Male   Elf      513
+## 14 The Two Towers             Male   Hobbit  2463
+## 15 The Two Towers             Male   Man     3589
+## 16 The Return Of The King     Male   Elf      510
+## 17 The Return Of The King     Male   Hobbit  2673
+## 18 The Return Of The King     Male   Man     2459
 ```
 
 
@@ -98,22 +128,34 @@ guest %>%
   DT::datatable(rownames = FALSE)
 ```
 
-<!--html_preserve--><div id="htmlwidget-0d52aac51d4b6bab6c3d" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0d52aac51d4b6bab6c3d">{"x":{"filter":"none","data":[[1,1,1,1,2,2,3,4,5,5,5,6,6,7,7,8,9,10,11,12,12,12,12,12,13,13,14,14,15,15],["Sommer Medrano","Phillip Medrano","Blanka Medrano","Emaan Medrano","Blair Park","Nigel Webb","Sinead English","Ayra Marks","Atlanta Connolly","Denzel Connolly","Chanelle Shah","Jolene Welsh","Hayley Booker","Amayah Sanford","Erika Foley","Ciaron Acosta","Diana Stuart","Cosmo Dunkley","Cai Mcdaniel","Daisy-May Caldwell","Martin Caldwell","Violet Caldwell","Nazifa Caldwell","Eric Caldwell","Rosanna Bird","Kurtis Frost","Huma Stokes","Samuel Rutledge","Eddison Collier","Stewart Nicholls"],["PENDING","vegetarian","chicken","PENDING","chicken",null,"PENDING","vegetarian","PENDING","fish","chicken",null,"vegetarian",null,"PENDING","PENDING","vegetarian","PENDING","fish","chicken","PENDING","PENDING","chicken","chicken","vegetarian","PENDING",null,"chicken","PENDING","chicken"],["PENDING","Menu C","Menu A","PENDING","Menu C",null,"PENDING","Menu B","PENDING","Menu B","Menu C",null,"Menu C","PENDING","PENDING","Menu A","Menu C","PENDING","Menu C","Menu B","PENDING","PENDING","PENDING","Menu B","Menu C","PENDING",null,"Menu C","PENDING","Menu B"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","CANCELLED","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>party<\/th>\n      <th>name<\/th>\n      <th>meal_wedding<\/th>\n      <th>meal_brunch<\/th>\n      <th>attendance_wedding<\/th>\n      <th>attendance_brunch<\/th>\n      <th>attendance_golf<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-ae16144bff19993265bf" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ae16144bff19993265bf">{"x":{"filter":"none","data":[[1,1,1,1,2,2,3,4,5,5,5,6,6,7,7,8,9,10,11,12,12,12,12,12,13,13,14,14,15,15],["Sommer Medrano","Phillip Medrano","Blanka Medrano","Emaan Medrano","Blair Park","Nigel Webb","Sinead English","Ayra Marks","Atlanta Connolly","Denzel Connolly","Chanelle Shah","Jolene Welsh","Hayley Booker","Amayah Sanford","Erika Foley","Ciaron Acosta","Diana Stuart","Cosmo Dunkley","Cai Mcdaniel","Daisy-May Caldwell","Martin Caldwell","Violet Caldwell","Nazifa Caldwell","Eric Caldwell","Rosanna Bird","Kurtis Frost","Huma Stokes","Samuel Rutledge","Eddison Collier","Stewart Nicholls"],["PENDING","vegetarian","chicken","PENDING","chicken",null,"PENDING","vegetarian","PENDING","fish","chicken",null,"vegetarian",null,"PENDING","PENDING","vegetarian","PENDING","fish","chicken","PENDING","PENDING","chicken","chicken","vegetarian","PENDING",null,"chicken","PENDING","chicken"],["PENDING","Menu C","Menu A","PENDING","Menu C",null,"PENDING","Menu B","PENDING","Menu B","Menu C",null,"Menu C","PENDING","PENDING","Menu A","Menu C","PENDING","Menu C","Menu B","PENDING","PENDING","PENDING","Menu B","Menu C","PENDING",null,"Menu C","PENDING","Menu B"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","CANCELLED","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>party<\/th>\n      <th>name<\/th>\n      <th>meal_wedding<\/th>\n      <th>meal_brunch<\/th>\n      <th>attendance_wedding<\/th>\n      <th>attendance_brunch<\/th>\n      <th>attendance_golf<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 1. Put "meal" and "attendance" as their own columns, with the events living in a new column.
 
 
 ```r
 (guest_long <- guest %>% 
-  pivot_longer(cols      = FILL_THIS_IN, 
-               names_to  = FILL_THIS_IN,
-               FILL_THIS_IN))
+  pivot_longer(cols      = c(-party, -name), 
+               names_to  = c('.value', 'event'),
+               names_sep = '_'))
 ```
 
 ```
-## Error: Can't subset columns that don't exist.
-## [31mx[39m The column `FILL_THIS_IN` doesn't exist.
+## # A tibble: 90 x 5
+##    party name            event   meal       attendance
+##    <dbl> <chr>           <chr>   <chr>      <chr>     
+##  1     1 Sommer Medrano  wedding PENDING    PENDING   
+##  2     1 Sommer Medrano  brunch  PENDING    PENDING   
+##  3     1 Sommer Medrano  golf    <NA>       PENDING   
+##  4     1 Phillip Medrano wedding vegetarian CONFIRMED 
+##  5     1 Phillip Medrano brunch  Menu C     CONFIRMED 
+##  6     1 Phillip Medrano golf    <NA>       CONFIRMED 
+##  7     1 Blanka Medrano  wedding chicken    CONFIRMED 
+##  8     1 Blanka Medrano  brunch  Menu A     CONFIRMED 
+##  9     1 Blanka Medrano  golf    <NA>       CONFIRMED 
+## 10     1 Emaan Medrano   wedding PENDING    PENDING   
+## # ... with 80 more rows
 ```
 
 2. Use `tidyr::separate()` to split the name into two columns: "first" and 
@@ -122,15 +164,50 @@ guest %>%
 
 ```r
 guest_long %>% 
-  separate(FILL_THIS_IN, into = FILL_THIS_IN)
+  separate(col = name,
+           into = c('first_name', 'last_name'),
+           sep = ' ')
 ```
 
 ```
-## Error in eval(lhs, parent, parent): object 'guest_long' not found
+## # A tibble: 90 x 6
+##    party first_name last_name event   meal       attendance
+##    <dbl> <chr>      <chr>     <chr>   <chr>      <chr>     
+##  1     1 Sommer     Medrano   wedding PENDING    PENDING   
+##  2     1 Sommer     Medrano   brunch  PENDING    PENDING   
+##  3     1 Sommer     Medrano   golf    <NA>       PENDING   
+##  4     1 Phillip    Medrano   wedding vegetarian CONFIRMED 
+##  5     1 Phillip    Medrano   brunch  Menu C     CONFIRMED 
+##  6     1 Phillip    Medrano   golf    <NA>       CONFIRMED 
+##  7     1 Blanka     Medrano   wedding chicken    CONFIRMED 
+##  8     1 Blanka     Medrano   brunch  Menu A     CONFIRMED 
+##  9     1 Blanka     Medrano   golf    <NA>       CONFIRMED 
+## 10     1 Emaan      Medrano   wedding PENDING    PENDING   
+## # ... with 80 more rows
 ```
 
 ```r
-  # unite(col = "name", FILL_THIS_IN, sep = FILL_THIS_IN)
+  unite(data = guest_long,
+        col = 'full_name',
+        name,
+           sep = ' ')
+```
+
+```
+## # A tibble: 90 x 5
+##    party full_name       event   meal       attendance
+##    <dbl> <chr>           <chr>   <chr>      <chr>     
+##  1     1 Sommer Medrano  wedding PENDING    PENDING   
+##  2     1 Sommer Medrano  brunch  PENDING    PENDING   
+##  3     1 Sommer Medrano  golf    <NA>       PENDING   
+##  4     1 Phillip Medrano wedding vegetarian CONFIRMED 
+##  5     1 Phillip Medrano brunch  Menu C     CONFIRMED 
+##  6     1 Phillip Medrano golf    <NA>       CONFIRMED 
+##  7     1 Blanka Medrano  wedding chicken    CONFIRMED 
+##  8     1 Blanka Medrano  brunch  Menu A     CONFIRMED 
+##  9     1 Blanka Medrano  golf    <NA>       CONFIRMED 
+## 10     1 Emaan Medrano   wedding PENDING    PENDING   
+## # ... with 80 more rows
 ```
 
 3. Which parties still have a "PENDING" status for all members and all events?
@@ -172,7 +249,8 @@ guest_long %>%
 ```
 
 ```
-## Error in eval(lhs, parent, parent): object 'guest_long' not found
+## Error: Can't subset columns that don't exist.
+## [31mx[39m The column `FILL_THIS_IN` doesn't exist.
 ```
 
 6. You also have a list of emails for each party, in this worksheet under the 

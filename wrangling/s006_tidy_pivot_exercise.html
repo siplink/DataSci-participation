@@ -2832,47 +2832,122 @@ email &lt;- read_csv(&quot;https://raw.githubusercontent.com/USF-Psych-DataSci/C
 ## 17 The Return Of The King     Hobbit Male    2673
 ## 18 The Return Of The King     Man    Male    2459</code></pre>
 <ol style="list-style-type: decimal">
-<li><p>Would you say this data is in tidy format?</p>
-<!-- Describe why or why not in this space. --></li>
-<li><p>Widen the data so that we see the words spoken by each race, by putting race as its own column.</p></li>
+<li>Would you say this data is in tidy format?</li>
+</ol>
+<p>This data is not in tidy format because observations are split up between multiple rows.</p>
+<p><!-- Describe why or why not in this space. --></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Widen the data so that we see the words spoken by each race, by putting race as its own column.</li>
 </ol>
 <pre class="r"><code>(lotr_wide &lt;- lotr %&gt;% 
-  pivot_wider(FILL_THIS_IN = c(-Race, -Words), 
-              FILL_THIS_IN = Race, 
-              FILL_THIS_IN = Words))</code></pre>
-<pre><code>## Error in pivot_wider(., FILL_THIS_IN = c(-Race, -Words), FILL_THIS_IN = Race, : unused arguments (FILL_THIS_IN = c(-Race, -Words), FILL_THIS_IN = Race, FILL_THIS_IN = Words)</code></pre>
+  pivot_wider(id_cols = c(-Race, -Words), 
+              names_from = Race, 
+              values_from = Words))</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   Film                       Gender   Elf Hobbit   Man
+##   &lt;chr&gt;                      &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 The Fellowship Of The Ring Female  1229     14     0
+## 2 The Two Towers             Female   331      0   401
+## 3 The Return Of The King     Female   183      2   268
+## 4 The Fellowship Of The Ring Male     971   3644  1995
+## 5 The Two Towers             Male     513   2463  3589
+## 6 The Return Of The King     Male     510   2673  2459</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Re-lengthen the wide LOTR data from Question 2 above.</li>
 </ol>
 <pre class="r"><code>lotr_wide %&gt;% 
-  pivot_longer(FILL_THIS_IN = FILL_THIS_IN, 
-               names_to  = FILL_THIS_IN, 
-               values_to = FILL_THIS_IN)</code></pre>
-<pre><code>## Error in eval(lhs, parent, parent): object &#39;lotr_wide&#39; not found</code></pre>
+  pivot_longer(cols = c(Elf, Hobbit, Man), 
+               names_to  = &#39;Race&#39;, 
+               values_to = &#39;Words&#39;)</code></pre>
+<pre><code>## # A tibble: 18 x 4
+##    Film                       Gender Race   Words
+##    &lt;chr&gt;                      &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;
+##  1 The Fellowship Of The Ring Female Elf     1229
+##  2 The Fellowship Of The Ring Female Hobbit    14
+##  3 The Fellowship Of The Ring Female Man        0
+##  4 The Two Towers             Female Elf      331
+##  5 The Two Towers             Female Hobbit     0
+##  6 The Two Towers             Female Man      401
+##  7 The Return Of The King     Female Elf      183
+##  8 The Return Of The King     Female Hobbit     2
+##  9 The Return Of The King     Female Man      268
+## 10 The Fellowship Of The Ring Male   Elf      971
+## 11 The Fellowship Of The Ring Male   Hobbit  3644
+## 12 The Fellowship Of The Ring Male   Man     1995
+## 13 The Two Towers             Male   Elf      513
+## 14 The Two Towers             Male   Hobbit  2463
+## 15 The Two Towers             Male   Man     3589
+## 16 The Return Of The King     Male   Elf      510
+## 17 The Return Of The King     Male   Hobbit  2673
+## 18 The Return Of The King     Male   Man     2459</code></pre>
 </div>
 <div id="exercise-2-multivariate-pivoting" class="section level2">
 <h2>Exercise 2: Multivariate Pivoting</h2>
 <p>Congratulations, you’re getting married! In addition to the wedding, you’ve decided to hold two other events: a day-of brunch and a day-before round of golf. You’ve made a guestlist of attendance so far, along with food preference for the food events (wedding and brunch).</p>
 <pre class="r"><code>guest %&gt;% 
   DT::datatable(rownames = FALSE)</code></pre>
-<div id="htmlwidget-0d52aac51d4b6bab6c3d" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0d52aac51d4b6bab6c3d">{"x":{"filter":"none","data":[[1,1,1,1,2,2,3,4,5,5,5,6,6,7,7,8,9,10,11,12,12,12,12,12,13,13,14,14,15,15],["Sommer Medrano","Phillip Medrano","Blanka Medrano","Emaan Medrano","Blair Park","Nigel Webb","Sinead English","Ayra Marks","Atlanta Connolly","Denzel Connolly","Chanelle Shah","Jolene Welsh","Hayley Booker","Amayah Sanford","Erika Foley","Ciaron Acosta","Diana Stuart","Cosmo Dunkley","Cai Mcdaniel","Daisy-May Caldwell","Martin Caldwell","Violet Caldwell","Nazifa Caldwell","Eric Caldwell","Rosanna Bird","Kurtis Frost","Huma Stokes","Samuel Rutledge","Eddison Collier","Stewart Nicholls"],["PENDING","vegetarian","chicken","PENDING","chicken",null,"PENDING","vegetarian","PENDING","fish","chicken",null,"vegetarian",null,"PENDING","PENDING","vegetarian","PENDING","fish","chicken","PENDING","PENDING","chicken","chicken","vegetarian","PENDING",null,"chicken","PENDING","chicken"],["PENDING","Menu C","Menu A","PENDING","Menu C",null,"PENDING","Menu B","PENDING","Menu B","Menu C",null,"Menu C","PENDING","PENDING","Menu A","Menu C","PENDING","Menu C","Menu B","PENDING","PENDING","PENDING","Menu B","Menu C","PENDING",null,"Menu C","PENDING","Menu B"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","CANCELLED","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>party<\/th>\n      <th>name<\/th>\n      <th>meal_wedding<\/th>\n      <th>meal_brunch<\/th>\n      <th>attendance_wedding<\/th>\n      <th>attendance_brunch<\/th>\n      <th>attendance_golf<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-ae16144bff19993265bf" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ae16144bff19993265bf">{"x":{"filter":"none","data":[[1,1,1,1,2,2,3,4,5,5,5,6,6,7,7,8,9,10,11,12,12,12,12,12,13,13,14,14,15,15],["Sommer Medrano","Phillip Medrano","Blanka Medrano","Emaan Medrano","Blair Park","Nigel Webb","Sinead English","Ayra Marks","Atlanta Connolly","Denzel Connolly","Chanelle Shah","Jolene Welsh","Hayley Booker","Amayah Sanford","Erika Foley","Ciaron Acosta","Diana Stuart","Cosmo Dunkley","Cai Mcdaniel","Daisy-May Caldwell","Martin Caldwell","Violet Caldwell","Nazifa Caldwell","Eric Caldwell","Rosanna Bird","Kurtis Frost","Huma Stokes","Samuel Rutledge","Eddison Collier","Stewart Nicholls"],["PENDING","vegetarian","chicken","PENDING","chicken",null,"PENDING","vegetarian","PENDING","fish","chicken",null,"vegetarian",null,"PENDING","PENDING","vegetarian","PENDING","fish","chicken","PENDING","PENDING","chicken","chicken","vegetarian","PENDING",null,"chicken","PENDING","chicken"],["PENDING","Menu C","Menu A","PENDING","Menu C",null,"PENDING","Menu B","PENDING","Menu B","Menu C",null,"Menu C","PENDING","PENDING","Menu A","Menu C","PENDING","Menu C","Menu B","PENDING","PENDING","PENDING","Menu B","Menu C","PENDING",null,"Menu C","PENDING","Menu B"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","CANCELLED","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>party<\/th>\n      <th>name<\/th>\n      <th>meal_wedding<\/th>\n      <th>meal_brunch<\/th>\n      <th>attendance_wedding<\/th>\n      <th>attendance_brunch<\/th>\n      <th>attendance_golf<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <ol style="list-style-type: decimal">
 <li>Put “meal” and “attendance” as their own columns, with the events living in a new column.</li>
 </ol>
 <pre class="r"><code>(guest_long &lt;- guest %&gt;% 
-  pivot_longer(cols      = FILL_THIS_IN, 
-               names_to  = FILL_THIS_IN,
-               FILL_THIS_IN))</code></pre>
-<pre><code>## Error: Can&#39;t subset columns that don&#39;t exist.
-## [31mx[39m The column `FILL_THIS_IN` doesn&#39;t exist.</code></pre>
+  pivot_longer(cols      = c(-party, -name), 
+               names_to  = c(&#39;.value&#39;, &#39;event&#39;),
+               names_sep = &#39;_&#39;))</code></pre>
+<pre><code>## # A tibble: 90 x 5
+##    party name            event   meal       attendance
+##    &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;     
+##  1     1 Sommer Medrano  wedding PENDING    PENDING   
+##  2     1 Sommer Medrano  brunch  PENDING    PENDING   
+##  3     1 Sommer Medrano  golf    &lt;NA&gt;       PENDING   
+##  4     1 Phillip Medrano wedding vegetarian CONFIRMED 
+##  5     1 Phillip Medrano brunch  Menu C     CONFIRMED 
+##  6     1 Phillip Medrano golf    &lt;NA&gt;       CONFIRMED 
+##  7     1 Blanka Medrano  wedding chicken    CONFIRMED 
+##  8     1 Blanka Medrano  brunch  Menu A     CONFIRMED 
+##  9     1 Blanka Medrano  golf    &lt;NA&gt;       CONFIRMED 
+## 10     1 Emaan Medrano   wedding PENDING    PENDING   
+## # ... with 80 more rows</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Use <code>tidyr::separate()</code> to split the name into two columns: “first” and “last”. Then, re-unite them with <code>tidyr::unite()</code>.</li>
 </ol>
 <pre class="r"><code>guest_long %&gt;% 
-  separate(FILL_THIS_IN, into = FILL_THIS_IN)</code></pre>
-<pre><code>## Error in eval(lhs, parent, parent): object &#39;guest_long&#39; not found</code></pre>
-<pre class="r"><code>  # unite(col = &quot;name&quot;, FILL_THIS_IN, sep = FILL_THIS_IN)</code></pre>
+  separate(col = name,
+           into = c(&#39;first_name&#39;, &#39;last_name&#39;),
+           sep = &#39; &#39;)</code></pre>
+<pre><code>## # A tibble: 90 x 6
+##    party first_name last_name event   meal       attendance
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;     
+##  1     1 Sommer     Medrano   wedding PENDING    PENDING   
+##  2     1 Sommer     Medrano   brunch  PENDING    PENDING   
+##  3     1 Sommer     Medrano   golf    &lt;NA&gt;       PENDING   
+##  4     1 Phillip    Medrano   wedding vegetarian CONFIRMED 
+##  5     1 Phillip    Medrano   brunch  Menu C     CONFIRMED 
+##  6     1 Phillip    Medrano   golf    &lt;NA&gt;       CONFIRMED 
+##  7     1 Blanka     Medrano   wedding chicken    CONFIRMED 
+##  8     1 Blanka     Medrano   brunch  Menu A     CONFIRMED 
+##  9     1 Blanka     Medrano   golf    &lt;NA&gt;       CONFIRMED 
+## 10     1 Emaan      Medrano   wedding PENDING    PENDING   
+## # ... with 80 more rows</code></pre>
+<pre class="r"><code>  unite(data = guest_long,
+        col = &#39;full_name&#39;,
+        name,
+           sep = &#39; &#39;)</code></pre>
+<pre><code>## # A tibble: 90 x 5
+##    party full_name       event   meal       attendance
+##    &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;     
+##  1     1 Sommer Medrano  wedding PENDING    PENDING   
+##  2     1 Sommer Medrano  brunch  PENDING    PENDING   
+##  3     1 Sommer Medrano  golf    &lt;NA&gt;       PENDING   
+##  4     1 Phillip Medrano wedding vegetarian CONFIRMED 
+##  5     1 Phillip Medrano brunch  Menu C     CONFIRMED 
+##  6     1 Phillip Medrano golf    &lt;NA&gt;       CONFIRMED 
+##  7     1 Blanka Medrano  wedding chicken    CONFIRMED 
+##  8     1 Blanka Medrano  brunch  Menu A     CONFIRMED 
+##  9     1 Blanka Medrano  golf    &lt;NA&gt;       CONFIRMED 
+## 10     1 Emaan Medrano   wedding PENDING    PENDING   
+## # ... with 80 more rows</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Which parties still have a “PENDING” status for all members and all events?</li>
 </ol>
@@ -2895,7 +2970,8 @@ email &lt;- read_csv(&quot;https://raw.githubusercontent.com/USF-Psych-DataSci/C
               names_from  = FILL_THIS_IN, 
               names_sep   = &quot;_&quot;, 
               values_from = FILL_THIS_IN)</code></pre>
-<pre><code>## Error in eval(lhs, parent, parent): object &#39;guest_long&#39; not found</code></pre>
+<pre><code>## Error: Can&#39;t subset columns that don&#39;t exist.
+## [31mx[39m The column `FILL_THIS_IN` doesn&#39;t exist.</code></pre>
 <ol start="6" style="list-style-type: decimal">
 <li>You also have a list of emails for each party, in this worksheet under the object <code>email</code>. Change this so that each person gets their own row. Use <code>tidyr::separate_rows()</code></li>
 </ol>

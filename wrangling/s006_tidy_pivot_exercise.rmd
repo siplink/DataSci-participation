@@ -30,24 +30,26 @@ lotr
 
 1. Would you say this data is in tidy format?
 
+This data is not in tidy format because observations are split up between multiple rows. 
+
    <!-- Describe why or why not in this space. -->
 
 2. Widen the data so that we see the words spoken by each race, by putting race as its own column.
 
 ```{r}
 (lotr_wide <- lotr %>% 
-  pivot_wider(FILL_THIS_IN = c(-Race, -Words), 
-              FILL_THIS_IN = Race, 
-              FILL_THIS_IN = Words))
+  pivot_wider(id_cols = c(-Race, -Words), 
+              names_from = Race, 
+              values_from = Words))
 ```
 
 3. Re-lengthen the wide LOTR data from Question 2 above.
 
 ```{r}
 lotr_wide %>% 
-  pivot_longer(FILL_THIS_IN = FILL_THIS_IN, 
-               names_to  = FILL_THIS_IN, 
-               values_to = FILL_THIS_IN)
+  pivot_longer(cols = c(Elf, Hobbit, Man), 
+               names_to  = 'Race', 
+               values_to = 'Words')
 ```
 
 
@@ -67,9 +69,10 @@ guest %>%
 
 ```{r}
 (guest_long <- guest %>% 
-  pivot_longer(cols      = FILL_THIS_IN, 
-               names_to  = FILL_THIS_IN,
-               FILL_THIS_IN))
+  pivot_longer(cols      = c(-party, -name), 
+               names_to  = c('.value', 'event'),
+               names_sep = '_'))
+              
 ```
 
 2. Use `tidyr::separate()` to split the name into two columns: "first" and 
@@ -77,8 +80,13 @@ guest %>%
 
 ```{r}
 guest_long %>% 
-  separate(FILL_THIS_IN, into = FILL_THIS_IN)
-  # unite(col = "name", FILL_THIS_IN, sep = FILL_THIS_IN)
+  separate(col = name,
+           into = c('first_name', 'last_name'),
+           sep = ' ')
+  unite(data = guest_long,
+        col = 'full_name',
+        name,
+           sep = ' ')
 ```
 
 3. Which parties still have a "PENDING" status for all members and all events?
