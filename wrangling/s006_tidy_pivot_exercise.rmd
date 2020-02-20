@@ -1,479 +1,169 @@
-# Tidy Data and Pivoting
-
+---
+title: "s06 Exercises: Pivoting and tidy data"
+output: 
+  html_document:
+    keep_md: true
+    theme: paper
+---
 
 ```{r, warning = FALSE, message = FALSE}
 library(tidyverse)
+lotr  <- read_csv("https://raw.githubusercontent.com/jennybc/lotr-tidy/master/data/lotr_tidy.csv")
+guest <- read_csv("https://raw.githubusercontent.com/USF-Psych-DataSci/Classroom/master/data/wedding/attend.csv")
+email <- read_csv("https://raw.githubusercontent.com/USF-Psych-DataSci/Classroom/master/data/wedding/emails.csv")
+```
+
+<!---The following chunk allows errors when knitting--->
+
+```{r allow errors, echo = FALSE}
+knitr::opts_chunk$set(error = TRUE, warning = FALSE)
 ```
 
 
-## Orientation
+## Exercise 1: Univariate Pivoting
 
-
-### Worksheet
-
-You can find a worksheet template for today [here](/tutorials/s06_pivot-exercise.Rmd).
-
-
-### Today
-
-Today's concept is __tidy data__ and the `tidyr` package.
-
-In fact `tidyr` Version 1.0.0 _just came out_ 19 days ago with some great new additions that we'll be looking at. We'll focus on:
-
-- Reshaping data by pivoting with `tidyr::pivot_longer()` and `tidyr::pivot_wider()`.
-- Making tibbles using `tibble::tibble()` and `tidyr::expand_grid()`.
-
-
-### Resources
-
-For concepts of tidy data: 
-
-- [Jenny Bryan's intro to tidy data](https://github.com/jennybc/lotr-tidy/blob/master/01-intro.md) is short and sweet.
-  - the repo this links to has some useful exercises too, but uses the older `spread()` and `gather()` functions.
-- `tidyr` [vignette on tidy data](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html).
-- [Hadley's paper on tidy data](https://vita.had.co.nz/papers/tidy-data.pdf) provides a thorough investigation.
-
-For pivoting with `tidyr`, check out the [pivot vignette](https://tidyr.tidyverse.org/articles/pivot.html).
-
-I also recommend reading the new additions that come with the new `tidyr` Version 1.0.0 in [this tidyverse article](https://www.tidyverse.org/articles/2019/09/tidyr-1-0-0/).
-
-
-## Tidy Data
-
-A data set is _tidy_ if:
-
-- Each row is an __observation__;
-- Each column is a __variable__;
-- Each cell is a __value__.
-
-This means that each value belongs to exactly one variable and one observation.
-
-Why bother? Because doing computations with untidy data can be a nightmare. Computations become simple with tidy data. 
-
-This also means that tidy data is relative, as it depends on how you define your observational unit and variables.
-
-```{r, echo = FALSE}
-haireye <- as_tibble(HairEyeColor) %>% 
-  count(Hair, Eye, wt = n) %>% 
-  rename(hair = Hair, eye = Eye)
-```
-
-As an example, consider this example derived from the `datasets::HairEyeColor` dataset, containing the number of people having a certain hair and eye colour.
-
-If one observation is identified by a _hair-eye colour combination_, then the tidy dataset is:
+Consider the Lord of the Rings data:
 
 ```{r}
-haireye %>% 
-  knitr::kable()
+lotr
 ```
 
-If one observation is identified by a _single person_, then the tidy dataset has one pair of values per person, and one row for each person. We can use the handy `tidyr::uncount()` function, the opposite of `dplyr::count()`:
+1. Would you say this data is in tidy format?
+
+   <!-- Describe why or why not in this space. -->
+
+2. Widen the data so that we see the words spoken by each race, by putting race as its own column.
 
 ```{r}
-haireye %>% 
-  tidyr::uncount(n) %>% 
-  knitr::kable()
+(lotr_wide <- lotr %>% 
+  pivot_wider(FILL_THIS_IN = c(-Race, -Words), 
+              FILL_THIS_IN = Race, 
+              FILL_THIS_IN = Words))
+```
+
+3. Re-lengthen the wide LOTR data from Question 2 above.
+
+```{r}
+lotr_wide %>% 
+  pivot_longer(FILL_THIS_IN = FILL_THIS_IN, 
+               names_to  = FILL_THIS_IN, 
+               values_to = FILL_THIS_IN)
 ```
 
 
-### Untidy Examples
+## Exercise 2: Multivariate Pivoting
 
-The following are examples of untidy data. They're untidy for either of the cases considered above, but for discussion, let's take a hair-eye colour combination to be one observational unit. 
+Congratulations, you're getting married! In addition to the wedding, you've 
+decided to hold two other events: a day-of brunch and a day-before round of 
+golf. You've made a guestlist of attendance so far, along with food preference 
+for the food events (wedding and brunch).
 
-Note that untidy does not always mean "bad", especially when the data set is too wide.
-
-__Untidy Example 1__: The following table is untidy because there are multiple observations per row. It's _too wide_.
-
-Imagine calculating the total number of people with each hair colour. You can't just `group_by()` and `summarize()`, here!
-
-```{r, echo = FALSE}
-haireye_untidy <- haireye %>% 
-  mutate(eye = str_c(eye, "_eyed")) %>% 
-  pivot_wider(id_cols = hair, names_from = eye, values_from = n)
-knitr::kable(haireye_untidy)
-```
-
-__Untidy Example 2__: The following table is untidy for the same reason as Example 1 -- multiple observations are contained per row. It's _too wide_.
-
-```{r, echo = FALSE}
-haireye %>% 
-  mutate(hair = str_c(hair, "_haired")) %>% 
-  pivot_wider(id_cols = eye, names_from = hair, values_from = n) %>% 
-  knitr::kable()
-```
-
-__Untidy Example 3__: This is untidy because each observational unit is spread across multiple columns. It's _too long_. In fact, we needed to add an identifier for each observation, otherwise we would have lost which row belongs to which observation! 
-
-Does red hair ever occur with blue eyes? Can't just `filter(hair == "red", eye == "blue")`!
-
-```{r, echo = FALSE}
-haireye %>% 
-  mutate(obs = 1:n()) %>% 
-  pivot_longer(cols = hair:eye, names_to = "body_part", values_to = "colour") %>% 
-  select(-n, n) %>% 
+```{r}
+guest %>% 
   DT::datatable(rownames = FALSE)
 ```
 
-__Untidy Example 4__: Just when you thought a data set couldn't get any longer! Now, each variable has its own row: hair colour, eye colour, and `n`. This demonstrates that there's no such thing as "long" and "wide" format, since these terms are relative. 
-
-```{r, echo = FALSE}
-haireye %>% 
-  mutate(obs = 1:n(),
-         n   = as.character(n)) %>% 
-  pivot_longer(cols = c(hair, eye, n), names_to = "variable", values_to = "value") %>% 
-  DT::datatable(rownames = FALSE)
-```
-
-_This is the sort of format that is common pulling data from the web or other "Big Data" sources._
-
-
-### Pivoting tools
-
-The task of making tidy data is about making data either _longer_, by stacking two or more rows, or _wider_, by putting one or more columns alongside each other based on groups. This is called __pivoting__ (or, reshaping).
-
-Sometimes, tidy data is incorrectly referred to as data in _long format_ as opposed to _wide format_, where "length" refers to the number of rows, and "width" the number of columns. But Example 3 of untidy data (above) is in fact too long and needs to be made wider! However, usually the task of tidying data involves lengthening, and usually the task of widening is useful for turning data into something more friendly for human eyes.
-
-The (new!) easiest and most powerful way to widen or lengthen data are with the functions `tidyr::pivot_wider()` and `tidyr::pivot_longer()`.
-
-History: R has seen many attempts at reshaping, all that's progressively gotten better. First came the `reshape` package. Then the `reshape2` package. Both were finicky. And they used function names that I could never remember: `melt()` and `cast()`. Then, the `tidyr::spread()` and `tidyr::gather()` functions provided a simple interface (and are still part of the `tidyr` package!), but used awkward terminology and weren't as flexible as they ought to be.
-
-
-## Univariate Pivoting
-
-Let's start with pivoting in the simplest case where only one variable is "out of place". We'll use the hair and eye colour example from before, using the untidy data version from Example 1:
+1. Put "meal" and "attendance" as their own columns, with the events living in a new column.
 
 ```{r}
-haireye_untidy <- haireye %>% 
-  mutate(eye = str_c(eye, "_eyed")) %>% 
-  pivot_wider(id_cols = hair, names_from = eye, values_from = n)
-
-haireye_untidy
+(guest_long <- guest %>% 
+  pivot_longer(cols      = FILL_THIS_IN, 
+               names_to  = FILL_THIS_IN,
+               FILL_THIS_IN))
 ```
 
-The _eye colour_ variable is spread out across columns. To fix this, we need to convert the eye colour columns to two columns:
-
-- one column to hold the eye colour (column names),
-- one column to hold the values.
-
-Doing this, we obtain:
-
-```{r, echo = FALSE}
-haireye_untidy %>% 
-  pivot_longer(contains("eyed"), names_to = "eye", values_to = "n")
-```
-
-For the reverse operation, we take the column `eye` and make each unique entry a new column, and the values of those columns take on `n`.
-
-
-### `pivot_longer()`
-
-`pivot_longer()` takes a data frame, and returns a data frame. The arguments after the data argument that we'll need are:
-
-- `cols` for the column names that we want to turn into a single column.
-- `names_to`: the old column names are going to a new column. What should this new column be named? (optional, but highly recommended)
-- `values_to`: the values underneath the old columns are going to a new column. What should this new column be named? (optional, but highly recommended)
-
-Possibly the trickiest bit is in identifying the column names. We could list all of them, but it's not robust to changes:
+2. Use `tidyr::separate()` to split the name into two columns: "first" and 
+"last". Then, re-unite them with `tidyr::unite()`.
 
 ```{r}
-haireye_untidy %>% 
-  pivot_longer(cols      = c(Blue_eyed, Brown_eyed, Green_eyed, Hazel_eyed),
-               names_to  = "eye",
-               values_to = "n")
+guest_long %>% 
+  separate(FILL_THIS_IN, into = FILL_THIS_IN)
+  # unite(col = "name", FILL_THIS_IN, sep = FILL_THIS_IN)
 ```
 
-We could identify a range. This is more robust, but still not very robust.
+3. Which parties still have a "PENDING" status for all members and all events?
 
 ```{r}
-haireye_untidy %>% 
-  pivot_longer(cols      = Blue_eyed:Hazel_eyed,
-               names_to  = "eye",
-               values_to = "n")
+FILL_THIS_IN %>% 
+  group_by(party) %>% 
+  summarize(all_pending = all(attendance == "PENDING"))
 ```
 
-Better is to use helper functions from the `tidyselect` package. In this case, we know the columns contain the text "eyed", so let's use `tidyselect::contains()`:
+4. Which parties still have a "PENDING" status for all members for the wedding?
 
 ```{r}
-haireye_untidy %>% 
-  pivot_longer(cols      = contains("eyed"),
-               names_to  = "eye",
-               values_to = "n")
+FILL_THIS_IN %>% 
+  group_by(party) %>% 
+  summarize(pending_wedding = all(FILL_THIS_IN == "PENDING"))
 ```
 
-Yet another way is to indicate everything except the `hair` column:
+
+5. Put the data back to the way it was.
 
 ```{r}
-haireye_untidy %>% 
-  pivot_longer(cols      = -hair,
-               names_to  = "eye",
-               values_to = "n")
-```
-
-
-### `pivot_wider()`
-
-Like `pivot_longer()`, `pivot_wider()` takes a data frame and returns a data frame. The arguments after the data argument that we'll need are:
-
-- `id_cols`: The columns you would like to keep. If widening to make data tidy, then this is an identifier for an observation.
-- `names_from`: the new column names are coming from an old column. Which column is this?
-- `values_from`: the values under the new columns are coming from an old column. Which column is this?
-
-```{r}
-haireye %>% 
-  pivot_wider(id_cols     = hair, 
-              names_from  = eye, 
-              values_from = n)
-```
-
-
-### Activity
-
-Fill out __Exercise 1: Univariate Pivoting__ in the [worksheet](/tutorials/s06_pivot-exercise.Rmd).
-
-
-## Multivariate Pivoting
-
-Now let's consider the case when more than one variable are "out of place" -- perhaps there are multiple variables per row, and/or multiple observations per row.
-
-For example, consider the (lightly modified) `iris` data set that we'll call `iris2`:
-
-```{r, echo = FALSE}
-iris2 <- iris %>%
-  mutate(id = 1:n()) %>% 
-  rename(species = Species) %>% 
-  pivot_longer(c(-species, -id), 
-               names_to  = "variable", 
-               values_to = "measurement") %>% 
-  mutate(variable = variable %>% 
-           str_replace("\\.", "_") %>% 
-           tolower()) %>% 
-  pivot_wider(c(id, species), 
-              names_from  = variable, 
-              values_from = measurement)
-DT::datatable(iris2, rownames = FALSE)
-```
-
-Although we probably wouldn't, we could view this as having _two variables bundled into the column names_:
-
-- "Plant part", either `sepal` or `petal`.
-- "Dimension", either `length` or `width`.
-
-The resulting tidy data frame would then be:
-
-```{r, echo = FALSE}
-iris2_longest <- iris2 %>% 
-  pivot_longer(cols      = c(-species, -id), 
-               names_to  = c("part", "dimension"),
-               names_sep = "_",
-               values_to = "measurement")
-```
-
-```{r}
-iris2_longest
-```
-
-More realistic is the situation where there are _multiple observations per row_:
-
-- An observation of (length, width) of the sepal.
-- An observation of (length, width) of the petal.
-
-The resulting tidy data frame has a length that's in between the above two:
-
-```{r, echo = FALSE}
-iris2_longer <- iris2 %>% 
-  pivot_longer(cols      = c(-id, -species), 
-               names_to  = c("part", ".value"), 
-               names_sep = "_")
-```
-
-```{r}
-iris2_longer
-```
-
-
-### `pivot_longer()`
-
-To obtain the case where two (or more) variables are contained in column names, here's how we specify the arguments of `pivot_longer()`:
-
-- `cols`: As usual.
-- `names_sep`: What is separating the variables in the column names?
-- `names_to`: The old columns are going to be put into new columns, after being separated. What should those columns be named?
-- `values_to`: As usual. 
-
-Here is the code:
-
-```{r}
-iris2 %>% 
-  pivot_longer(cols      = c(-species, -id), 
-               names_to  = c("part", "dimension"),
-               names_sep = "_",
-               values_to = "measurement")
-```
-
-To obtain the case where multiple observations are contained in one row, here's how to specify the arguments of `pivot_longer()`:
-
-- `cols`: As usual.
-- `names_sep`: As above.
-- `names_to`: As above, except this time, one part of the old column names are going to stay as columns (in this case, "length" and "width"). Indicate `".value"` instead of a new column name.  
-- `values_to`: Not needed! You've already indicated that using the `".value"` placeholder. 
- 
-```{r}
-iris2 %>% 
-  pivot_longer(cols      = c(-id, -species), 
-               names_to  = c("part", ".value"), 
-               names_sep = "_")
-```
-
-
-### `pivot_wider()`
-
-If two or more columns contain parts of a variable name (i.e., each unique combination of these columns gives rise to a new variable), here's how we can use `pivot_wider()`:
-
-- `id_cols`: as usual.
-- `names_from`: the new variable names are coming from old columns. Which old columns?
-- `names_sep`: What character should you separate the entries of the old columns by?
-- `values_from`: as usual.
-
-Here is the code to go from the longest form to the original:
-
-```{r}
-iris2_longest %>% 
-  pivot_wider(id_cols     = c(id, species),
-              names_from  = c(part, dimension), 
+guest_long %>% 
+  pivot_wider(id_cols     = FILL_THIS_IN, 
+              names_from  = FILL_THIS_IN, 
               names_sep   = "_", 
-              values_from = measurement)
+              values_from = FILL_THIS_IN)
 ```
 
-If variables are spread out amongst rows _and_ columns (for example, "sepal width" has "sepal" in a column, and "width" as a column name), here's how we can use `pivot_wider()`:
-
-- `id_cols`: as usual
-- `names_from`: Which column contains the part of the variable?
-- `names_sep`: As before, what character should you separate the entries of the old columns by?
-- `values_from`: Which column names contain the other part of the variable?
-
-Here is the code to go from the "semi-long" form to the original:
+6. You also have a list of emails for each party, in this worksheet under the 
+   object `email`. Change this so that each person gets their own row. 
+   Use `tidyr::separate_rows()`
 
 ```{r}
-iris2_longer %>% 
-  pivot_wider(id_cols     = c(id, species), 
-              names_from  = part, 
-              names_sep   = "_",
-              values_from = c(length, width))
+email %>% 
+  separate_rows(FILL_THIS_IN, sep = FILL_THIS_IN)
 ```
 
 
-### Activity
+## Exercise 3: Making tibbles
 
-Fill out __Exercise 2: Multivariate Pivoting__ in the [worksheet](/tutorials/s06_pivot-exercise.Rmd).
+1. Create a tibble that has the following columns:
 
-
-## Making tibbles
-
-In base R, we can make data frames using the `data.frame()` function. The tidyverse version is `tibble::tibble()`, which also has backwards referencing to variables you make on the fly. It's also stricter by not allowing recycling unless the vector is of length 1:
-
-Good:
+- A `label` column with `"Sample A"` in its entries.
+- 100 random observations drawn from the N(0,1) distribution in the column `x`
+  - "N" means the normal distribution. "(0, 1)" means mean = 0, sd = 1.
+  - Use `rnorm()`
+- `y` calculated as the `x` values + N(0,1) error. 
 
 ```{r}
-tibble(x = 1:6,
-       y = min(x))
+n <- 100
+FILL_THIS_IN(label = FILL_THIS_IN,
+             FILL_THIS_IN = rnorm(n),
+             FILL_THIS_IN)
 ```
 
-Bad:
 
-```{r, error = TRUE}
-tibble(x = 1:6,
-       y = 1:2)
-```
-
-Truly manual construction of tibbles is easy with `tibble::tribble()`:
+2. Generate a Normal sample of size 100 for each combination of the following 
+means (`mu`) and standard deviations (`sd`).
 
 ```{r}
-tribble(
-  ~Day, ~Breakfast,
-  1, "Apple",
-  2, "Yogurt",
-  3, "Yogurt"
+n <- 100
+mu <- c(-5, 0, 5)
+sd <- c(1, 3, 10)
+FILL_THIS_IN(mu = mu, sd = sd) %>% 
+  group_by_all() %>% 
+  mutate(z = list(rnorm(n, mu, sd))) %>% 
+  FILL_THIS_IN
+```
+
+
+3. Fix the `experiment` tibble below (originally defined in the documentation 
+of the `tidyr::expand()` function) so that all three repeats are displayed for 
+each person, and the measurements are kept. Some code is given, but it doesn't
+quite work. It needs a few adjustments. What are they?
+
+```{r}
+experiment <- tibble(
+  name = rep(c("Alex", "Robert", "Sam"), c(3, 2, 1)),
+  trt  = rep(c("a", "b", "a"), c(3, 2, 1)),
+  rep = c(1, 2, 3, 1, 2, 1),
+  measurement_1 = runif(6),
+  measurement_2 = runif(6)
 )
-```
-
-Check out the `datapasta` package for ways to reproducibly copy-paste data from 
-spreadsheets into R. `datapasta` uses `tribble()`.
-
-List columns are easy with tibbles!
-
-```{r}
-(list_col <- tibble(n = 1:2,
-                    y = list(iris, mtcars)))
-```
-
-Often obtained with `nest()` and `unnest()`:
-
-```{r}
-(iris_nest <- iris %>% 
-  group_by(Species) %>% 
-  nest())
-```
-
-```{r}
-iris_nest %>% 
-  unnest(data)
-```
-
-`expand_grid()` to obtain all combinations:
-
-```{r}
-expand_grid(x = 1:2, y = 1:2, z = 1:2)
-```
-
-In conjunction with `nesting()`:
-
-```{r}
-expand_grid(nesting(x = 1:2, y = 1:2), z = 1:2)
+experiment %>% expand(name, trt, rep)
 ```
 
 
-## Implicit `NA`'s
-
-Sometimes there's "hidden" missing data in a tibble. Here's an example  
-from the documentation of `tidyr::expand()`:
-
-```{r}
-(df <- tibble(
-  year   = c(2010, 2010, 2010, 2010, 2012, 2012, 2012),
-  qtr    = c(   1,    2,    3,    4,    1,    2,    3),
-  return = rnorm(7)
-))
-```
-
-Here, there are values for `qtr` 1, 2, 3, 4 in `year` 2010 and 
-`qtr` 1, 2, 3 in `year` 2012, but no `qtr` 4 in `year` 2012. 
-The value of `return` in `year` 2012, `qtr` 4 is "implicilty" `NA`.
-
-We can use functions to fill out this data frame and make these "implicit" missing
-values explicit.
-
-We can consider all existing combinations by invoking the column names in 
-`expand()` or `complete()` (which either _drops_ or _keeps_ all other columns):
-
-```{r}
-df %>% 
-  expand(year, qtr)
-df %>% 
-  complete(year, qtr)
-```
-
-We can consider new combinations by specifying an expectation of possible values:
-
-```{r}
-df %>% 
-  expand(year = 2010:2012, qtr)
-df %>% 
-  complete(year = 2010:2012, qtr)
-```
-
-Want to link two or more columns when looking for combinations? Use `nesting()`.
-
-
-## Activity (10 min)
-
-Fill out __Exercise 3: Making tibbles__ in the [worksheet](/tutorials/s06_pivot-exercise.Rmd).
