@@ -128,8 +128,8 @@ guest %>%
   DT::datatable(rownames = FALSE)
 ```
 
-<!--html_preserve--><div id="htmlwidget-ae16144bff19993265bf" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ae16144bff19993265bf">{"x":{"filter":"none","data":[[1,1,1,1,2,2,3,4,5,5,5,6,6,7,7,8,9,10,11,12,12,12,12,12,13,13,14,14,15,15],["Sommer Medrano","Phillip Medrano","Blanka Medrano","Emaan Medrano","Blair Park","Nigel Webb","Sinead English","Ayra Marks","Atlanta Connolly","Denzel Connolly","Chanelle Shah","Jolene Welsh","Hayley Booker","Amayah Sanford","Erika Foley","Ciaron Acosta","Diana Stuart","Cosmo Dunkley","Cai Mcdaniel","Daisy-May Caldwell","Martin Caldwell","Violet Caldwell","Nazifa Caldwell","Eric Caldwell","Rosanna Bird","Kurtis Frost","Huma Stokes","Samuel Rutledge","Eddison Collier","Stewart Nicholls"],["PENDING","vegetarian","chicken","PENDING","chicken",null,"PENDING","vegetarian","PENDING","fish","chicken",null,"vegetarian",null,"PENDING","PENDING","vegetarian","PENDING","fish","chicken","PENDING","PENDING","chicken","chicken","vegetarian","PENDING",null,"chicken","PENDING","chicken"],["PENDING","Menu C","Menu A","PENDING","Menu C",null,"PENDING","Menu B","PENDING","Menu B","Menu C",null,"Menu C","PENDING","PENDING","Menu A","Menu C","PENDING","Menu C","Menu B","PENDING","PENDING","PENDING","Menu B","Menu C","PENDING",null,"Menu C","PENDING","Menu B"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","CANCELLED","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>party<\/th>\n      <th>name<\/th>\n      <th>meal_wedding<\/th>\n      <th>meal_brunch<\/th>\n      <th>attendance_wedding<\/th>\n      <th>attendance_brunch<\/th>\n      <th>attendance_golf<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-e41e5246019136b1411a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e41e5246019136b1411a">{"x":{"filter":"none","data":[[1,1,1,1,2,2,3,4,5,5,5,6,6,7,7,8,9,10,11,12,12,12,12,12,13,13,14,14,15,15],["Sommer Medrano","Phillip Medrano","Blanka Medrano","Emaan Medrano","Blair Park","Nigel Webb","Sinead English","Ayra Marks","Atlanta Connolly","Denzel Connolly","Chanelle Shah","Jolene Welsh","Hayley Booker","Amayah Sanford","Erika Foley","Ciaron Acosta","Diana Stuart","Cosmo Dunkley","Cai Mcdaniel","Daisy-May Caldwell","Martin Caldwell","Violet Caldwell","Nazifa Caldwell","Eric Caldwell","Rosanna Bird","Kurtis Frost","Huma Stokes","Samuel Rutledge","Eddison Collier","Stewart Nicholls"],["PENDING","vegetarian","chicken","PENDING","chicken",null,"PENDING","vegetarian","PENDING","fish","chicken",null,"vegetarian",null,"PENDING","PENDING","vegetarian","PENDING","fish","chicken","PENDING","PENDING","chicken","chicken","vegetarian","PENDING",null,"chicken","PENDING","chicken"],["PENDING","Menu C","Menu A","PENDING","Menu C",null,"PENDING","Menu B","PENDING","Menu B","Menu C",null,"Menu C","PENDING","PENDING","Menu A","Menu C","PENDING","Menu C","Menu B","PENDING","PENDING","PENDING","Menu B","Menu C","PENDING",null,"Menu C","PENDING","Menu B"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","CANCELLED","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"],["PENDING","CONFIRMED","CONFIRMED","PENDING","CONFIRMED","CANCELLED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","CANCELLED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","PENDING","CONFIRMED","CONFIRMED","PENDING","PENDING","PENDING","CONFIRMED","CONFIRMED","PENDING","CANCELLED","CONFIRMED","PENDING","CONFIRMED"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>party<\/th>\n      <th>name<\/th>\n      <th>meal_wedding<\/th>\n      <th>meal_brunch<\/th>\n      <th>attendance_wedding<\/th>\n      <th>attendance_brunch<\/th>\n      <th>attendance_golf<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 1. Put "meal" and "attendance" as their own columns, with the events living in a new column.
 
@@ -214,26 +214,43 @@ guest_long %>%
 
 
 ```r
-FILL_THIS_IN %>% 
+guest_long %>% 
   group_by(party) %>% 
   summarize(all_pending = all(attendance == "PENDING"))
 ```
 
 ```
-## Error in eval(lhs, parent, parent): object 'FILL_THIS_IN' not found
+## # A tibble: 15 x 2
+##    party all_pending
+##    <dbl> <lgl>      
+##  1     1 FALSE      
+##  2     2 FALSE      
+##  3     3 TRUE       
+##  4     4 TRUE       
+##  5     5 FALSE      
+##  6     6 FALSE      
+##  7     7 FALSE      
+##  8     8 TRUE       
+##  9     9 FALSE      
+## 10    10 TRUE       
+## 11    11 FALSE      
+## 12    12 FALSE      
+## 13    13 FALSE      
+## 14    14 FALSE      
+## 15    15 FALSE
 ```
 
 4. Which parties still have a "PENDING" status for all members for the wedding?
 
 
 ```r
-FILL_THIS_IN %>% 
+guest_long %>% 
   group_by(party) %>% 
-  summarize(pending_wedding = all(FILL_THIS_IN == "PENDING"))
+  summarize(pending_wedding = all(attendnce == "PENDING"))
 ```
 
 ```
-## Error in eval(lhs, parent, parent): object 'FILL_THIS_IN' not found
+## Error: object 'attendnce' not found
 ```
 
 
@@ -242,15 +259,28 @@ FILL_THIS_IN %>%
 
 ```r
 guest_long %>% 
-  pivot_wider(id_cols     = FILL_THIS_IN, 
-              names_from  = FILL_THIS_IN, 
+  pivot_wider(id_cols     = c(party, name), 
+              names_from  = event,
               names_sep   = "_", 
-              values_from = FILL_THIS_IN)
+              values_from = c(attendance, meal))
 ```
 
 ```
-## Error: Can't subset columns that don't exist.
-## [31mx[39m The column `FILL_THIS_IN` doesn't exist.
+## # A tibble: 30 x 8
+##    party name  attendance_wedd~ attendance_brun~ attendance_golf meal_wedding
+##    <dbl> <chr> <chr>            <chr>            <chr>           <chr>       
+##  1     1 Somm~ PENDING          PENDING          PENDING         PENDING     
+##  2     1 Phil~ CONFIRMED        CONFIRMED        CONFIRMED       vegetarian  
+##  3     1 Blan~ CONFIRMED        CONFIRMED        CONFIRMED       chicken     
+##  4     1 Emaa~ PENDING          PENDING          PENDING         PENDING     
+##  5     2 Blai~ CONFIRMED        CONFIRMED        CONFIRMED       chicken     
+##  6     2 Nige~ CANCELLED        CANCELLED        CANCELLED       <NA>        
+##  7     3 Sine~ PENDING          PENDING          PENDING         PENDING     
+##  8     4 Ayra~ PENDING          PENDING          PENDING         vegetarian  
+##  9     5 Atla~ PENDING          PENDING          PENDING         PENDING     
+## 10     5 Denz~ CONFIRMED        CONFIRMED        CONFIRMED       fish        
+## # ... with 20 more rows, and 2 more variables: meal_brunch <chr>,
+## #   meal_golf <chr>
 ```
 
 6. You also have a list of emails for each party, in this worksheet under the 

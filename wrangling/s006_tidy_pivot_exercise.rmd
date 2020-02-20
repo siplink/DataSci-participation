@@ -92,7 +92,7 @@ guest_long %>%
 3. Which parties still have a "PENDING" status for all members and all events?
 
 ```{r}
-FILL_THIS_IN %>% 
+guest_long %>% 
   group_by(party) %>% 
   summarize(all_pending = all(attendance == "PENDING"))
 ```
@@ -100,9 +100,9 @@ FILL_THIS_IN %>%
 4. Which parties still have a "PENDING" status for all members for the wedding?
 
 ```{r}
-FILL_THIS_IN %>% 
+guest_long %>% 
   group_by(party) %>% 
-  summarize(pending_wedding = all(FILL_THIS_IN == "PENDING"))
+  summarize(pending_wedding = all(attendnce == "PENDING"))
 ```
 
 
@@ -110,10 +110,10 @@ FILL_THIS_IN %>%
 
 ```{r}
 guest_long %>% 
-  pivot_wider(id_cols     = FILL_THIS_IN, 
-              names_from  = FILL_THIS_IN, 
+  pivot_wider(id_cols     = c(party, name), 
+              names_from  = event,
               names_sep   = "_", 
-              values_from = FILL_THIS_IN)
+              values_from = c(attendance, meal))
 ```
 
 6. You also have a list of emails for each party, in this worksheet under the 
