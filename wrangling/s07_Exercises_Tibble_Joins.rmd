@@ -63,7 +63,7 @@ Let's take a look at them (after minor modifications by renaming and shuffling):
 
 ```{r}
 time %>% 
-  inner_join(album, by = 'song')
+  inner_join(album, by = c('song', 'artist_name'))
 ```
 
 2. Go ahead and add the corresponding albums to the `time` tibble, being sure to 
@@ -94,7 +94,7 @@ available in one tibble. What would you do?
   
 ```{r}
 time %>% 
-  full_join(album, by = "song")
+  full_join(select(album, -artist_name), by = "song")
 ```
 
 

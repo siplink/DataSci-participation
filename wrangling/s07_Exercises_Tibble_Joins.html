@@ -433,23 +433,23 @@ devtools::install_github(&quot;JoeyBernhardt/singer&quot;)</code></pre>
 <li>We really care about the songs in <code>time</code>. But, for which of those songs do we know its corresponding album?</li>
 </ol>
 <pre class="r"><code>time %&gt;% 
-  inner_join(album, by = &#39;song&#39;)</code></pre>
-<pre><code>## # A tibble: 13 x 6
-##    song               artist_name.x   year artist_name.y  city     album        
-##    &lt;chr&gt;              &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;    &lt;chr&gt;        
-##  1 &quot;Grievance&quot;        Pearl Jam       2000 Pearl Jam      Seattle~ Binaural     
-##  2 &quot;Stupidmop&quot;        Pearl Jam       1994 Pearl Jam      Seattle~ Vitalogy     
-##  3 &quot;Present Tense&quot;    Pearl Jam       1996 Pearl Jam      Seattle~ No Code      
-##  4 &quot;MFC&quot;              Pearl Jam       1998 Pearl Jam      Seattle~ Live On Two ~
-##  5 &quot;Lukin&quot;            Pearl Jam       1996 Pearl Jam      Seattle~ Seattle Wash~
-##  6 &quot;It&#39;s Lulu&quot;        The Boo Radle~  1995 The Boo Radle~ Liverpo~ Best Of      
-##  7 &quot;Sparrow&quot;          The Boo Radle~  1992 The Boo Radle~ Liverpo~ Everything&#39;s~
-##  8 &quot;High as Monkeys&quot;  The Boo Radle~  1998 The Boo Radle~ Liverpo~ Kingsize     
-##  9 &quot;Butterfly McQuee~ The Boo Radle~  1993 The Boo Radle~ Liverpo~ Giant Steps  
-## 10 &quot;My One and Only ~ Carly Simon     2005 Carly Simon    New Yor~ Moonlight Se~
-## 11 &quot;It Was So Easy  ~ Carly Simon     1972 Carly Simon    New Yor~ No Secrets   
-## 12 &quot;I&#39;ve Got A Crush~ Carly Simon     1994 Carly Simon    New Yor~ Clouds In My~
-## 13 &quot;Manha De Carnava~ Carly Simon     2007 Carly Simon    New Yor~ Into White</code></pre>
+  inner_join(album, by = c(&#39;song&#39;, &#39;artist_name&#39;))</code></pre>
+<pre><code>## # A tibble: 13 x 5
+##    song                       artist_name    year city        album             
+##    &lt;chr&gt;                      &lt;chr&gt;         &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;             
+##  1 &quot;Grievance&quot;                Pearl Jam      2000 Seattle, WA Binaural          
+##  2 &quot;Stupidmop&quot;                Pearl Jam      1994 Seattle, WA Vitalogy          
+##  3 &quot;Present Tense&quot;            Pearl Jam      1996 Seattle, WA No Code           
+##  4 &quot;MFC&quot;                      Pearl Jam      1998 Seattle, WA Live On Two Legs  
+##  5 &quot;Lukin&quot;                    Pearl Jam      1996 Seattle, WA Seattle Washingto~
+##  6 &quot;It&#39;s Lulu&quot;                The Boo Radl~  1995 Liverpool,~ Best Of           
+##  7 &quot;Sparrow&quot;                  The Boo Radl~  1992 Liverpool,~ Everything&#39;s Alri~
+##  8 &quot;High as Monkeys&quot;          The Boo Radl~  1998 Liverpool,~ Kingsize          
+##  9 &quot;Butterfly McQueen&quot;        The Boo Radl~  1993 Liverpool,~ Giant Steps       
+## 10 &quot;My One and Only Love&quot;     Carly Simon    2005 New York, ~ Moonlight Serenade
+## 11 &quot;It Was So Easy  (LP Vers~ Carly Simon    1972 New York, ~ No Secrets        
+## 12 &quot;I&#39;ve Got A Crush On You&quot;  Carly Simon    1994 New York, ~ Clouds In My Coff~
+## 13 &quot;Manha De Carnaval (Theme~ Carly Simon    2007 New York, ~ Into White</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Go ahead and add the corresponding albums to the <code>time</code> tibble, being sure to preserve rows even if album info is not readily available.</li>
 </ol>
@@ -503,20 +503,20 @@ devtools::install_github(&quot;JoeyBernhardt/singer&quot;)</code></pre>
 <li>You’ve come across these two tibbles, and just wish all the info was available in one tibble. What would you do?</li>
 </ol>
 <pre class="r"><code>time %&gt;% 
-  full_join(album, by = &quot;song&quot;)</code></pre>
-<pre><code>## # A tibble: 23 x 6
-##    song            artist_name.x   year artist_name.y  city      album          
-##    &lt;chr&gt;           &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;     &lt;chr&gt;          
-##  1 Corduroy        Pearl Jam       1994 &lt;NA&gt;           &lt;NA&gt;      &lt;NA&gt;           
-##  2 Grievance       Pearl Jam       2000 Pearl Jam      Seattle,~ Binaural       
-##  3 Stupidmop       Pearl Jam       1994 Pearl Jam      Seattle,~ Vitalogy       
-##  4 Present Tense   Pearl Jam       1996 Pearl Jam      Seattle,~ No Code        
-##  5 MFC             Pearl Jam       1998 Pearl Jam      Seattle,~ Live On Two Le~
-##  6 Lukin           Pearl Jam       1996 Pearl Jam      Seattle,~ Seattle Washin~
-##  7 It&#39;s Lulu       The Boo Radle~  1995 The Boo Radle~ Liverpoo~ Best Of        
-##  8 Sparrow         The Boo Radle~  1992 The Boo Radle~ Liverpoo~ Everything&#39;s A~
-##  9 Martin_ Doom! ~ The Boo Radle~  1995 &lt;NA&gt;           &lt;NA&gt;      &lt;NA&gt;           
-## 10 Leaves And Sand The Boo Radle~  1993 &lt;NA&gt;           &lt;NA&gt;      &lt;NA&gt;           
+  full_join(select(album, -artist_name), by = &quot;song&quot;)</code></pre>
+<pre><code>## # A tibble: 23 x 5
+##    song                  artist_name     year city         album                
+##    &lt;chr&gt;                 &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;        &lt;chr&gt;                
+##  1 Corduroy              Pearl Jam       1994 &lt;NA&gt;         &lt;NA&gt;                 
+##  2 Grievance             Pearl Jam       2000 Seattle, WA  Binaural             
+##  3 Stupidmop             Pearl Jam       1994 Seattle, WA  Vitalogy             
+##  4 Present Tense         Pearl Jam       1996 Seattle, WA  No Code              
+##  5 MFC                   Pearl Jam       1998 Seattle, WA  Live On Two Legs     
+##  6 Lukin                 Pearl Jam       1996 Seattle, WA  Seattle Washington N~
+##  7 It&#39;s Lulu             The Boo Radle~  1995 Liverpool, ~ Best Of              
+##  8 Sparrow               The Boo Radle~  1992 Liverpool, ~ Everything&#39;s Alright~
+##  9 Martin_ Doom! It&#39;s S~ The Boo Radle~  1995 &lt;NA&gt;         &lt;NA&gt;                 
+## 10 Leaves And Sand       The Boo Radle~  1993 &lt;NA&gt;         &lt;NA&gt;                 
 ## # ... with 13 more rows</code></pre>
 </div>
 <div id="exercise-2-lotr" class="section level2">
