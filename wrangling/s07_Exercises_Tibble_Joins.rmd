@@ -21,7 +21,7 @@ If you want, you could instead install the `singer` package itself. To do that,
 you'll need to install `devtools`. Running this code in your console should do 
 the trick:
   
-  ```
+  ```{r}
 install.packages("devtools")
 devtools::install_github("JoeyBernhardt/singer")
 ```
@@ -36,7 +36,7 @@ knitr::opts_chunk$set(fig.width=4, fig.height=3, warning = FALSE, fig.align = "c
 
 <!-- The following chunk allows errors when knitting -->
   
-  ```{r allow errors, echo = FALSE}
+```{r allow errors, echo = FALSE}
 knitr::opts_chunk$set(error = TRUE)
 ```
 
@@ -156,5 +156,27 @@ union(
 3. The rows contained in `z` are bad! Remove those rows from `y`.
 
 ```{r}
-diffset(y, z)
+setdiff(y, z)
 ```
+
+  ```{r}
+install.packages("nycflights13")
+library(nycflights13)
+```
+
+```{r}
+airlines
+airports
+flights
+planes
+weather
+```
+
+```{r}
+flights %>%
+  left_join(planes, by = c('tailnum', 'year')) %>%
+  semi_join(weather, by = 'year') %>%
+  full_join(airlines, by = 'carrier') %>%
+  left_join(airports, by = 'name')
+```
+
